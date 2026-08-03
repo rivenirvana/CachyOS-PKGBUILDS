@@ -1,22 +1,22 @@
 # Maintainer: Peter Jung <admin@ptr1337.dev>
 
 _gitname=CachyOS-Settings
-pkgname=cachyos-settings
-pkgver=1.4.0
+pkgname=custom-settings
+pkgver=1.4.0.r5.g7a20ac0
 pkgrel=1
 epoch=1
-groups=(cachyos)
 arch=('any')
 license=(GPL-1.0-only)
 makedepends=('coreutils' 'git')
-pkgdesc='CachyOS - Settings'
-url="https://github.com/CachyOS/$_gitname"
-source=("git+$url.git?signed#tag=$pkgver")
-install="$pkgname.install"
-sha256sums=('1c0323ef9a7cad57408bef6e0addb95ca05998057c28a8e97dfcf66c0856f2eb')
+pkgdesc='CachyOS - Settings (Custom)'
+url="https://github.com/rivenirvana/$_gitname"
+source=("git+$url.git?signed#branch=custom")
+install='cachyos-settings.install'
+sha256sums=('SKIP')
 validpgpkeys=(
   E8B9AA39F054E30E8290D492C3C4820857F654FE  # Peter Jung <admin@ptr1337.dev>
   B1B70BB1CD56047DEF31DE2EB62C3D10C54D5DA9  # Vladislav Nepogodin <nepogodin.vlad@gmail.com>
+  B658D887D0EAF9469B2C4C78EC2BB2E0EC3CE2FA  # Arvin Verain <arvinverain@proton.me>
 )
 depends=(
   zram-generator
@@ -31,8 +31,13 @@ optdepends=('libluv: for topmem'
             'lua-luv: for topmem'
             'power-profiles-daemon: For game-performance')
 provides=('ntsync-common')
+conflicts=('cachyos-settings')
 prepare() {
   cd $_gitname
+}
+pkgver() {
+  cd $_gitname
+  git describe --long --abbrev=7 | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
 }
 package() {
   install -d "$pkgdir/etc"
